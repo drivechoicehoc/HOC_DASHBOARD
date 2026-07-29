@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Employee
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h2 class="mb-0">
+                Edit Employee
+            </h2>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <!-- ========================================== -->
+                <!-- Employee Information -->
+                <!-- ========================================== -->
+
+                <h4>Employee Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Employee No.
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ employee.employee_number }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Hire Date
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="hire_date"
+                            class="form-control"
+                            value="{% if employee.hire_date %}{{ employee.hire_date.strftime('%Y-%m-%d') }}{% endif %}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Department
+
+                        </label>
+
+                        <select
+                            name="department"
+                            class="form-select">
+
+                            <option value="">Select Department</option>
+
+                            <option value="Executive Management"
+                                {% if employee.department=="Executive Management" %}selected{% endif %}>
+                                Executive Management
+                            </option>
+
+                            <option value="Dealership Management"
+                                {% if employee.department=="Dealership Management" %}selected{% endif %}>
+                                Dealership Management
+                            </option>
+
+                            <option value="Business Development Center (BDC)"
+                                {% if employee.department=="Business Development Center (BDC)" %}selected{% endif %}>
+                                Business Development Center (BDC)
+                            </option>
+
+                            <option value="Sales"
+                                {% if employee.department=="Sales" %}selected{% endif %}>
+                                Sales
+                            </option>
+
+                            <option value="Finance"
+                                {% if employee.department=="Finance" %}selected{% endif %}>
+                                Finance
+                            </option>
+
+                            <option value="Administration"
+                                {% if employee.department=="Administration" %}selected{% endif %}>
+                                Administration
+                            </option>
+
+                            <option value="Information Technology"
+                                {% if employee.department=="Information Technology" %}selected{% endif %}>
+                                Information Technology
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Status
+
+                        </label>
+
+                        <select
+                            name="active"
+                            class="form-select">
+
+                            <option value="1"
+                                {% if employee.active %}selected{% endif %}>
+                                Active
+                            </option>
+
+                            <option value="0"
+                                {% if not employee.active %}selected{% endif %}>
+                                Inactive
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ========================================== -->
+                <!-- Personal Information -->
+                <!-- ========================================== -->
+
+                <h4>Personal Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            First Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            class="form-control"
+                            value="{{ employee.first_name }}"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Middle Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="middle_name"
+                            class="form-control"
+                            value="{{ employee.middle_name or '' }}">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+                            Last Name
+                        </label>
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            class="form-control"
+                            value="{{ employee.last_name }}"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            value="{{ employee.email or '' }}">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            class="form-control"
+                            value="{{ employee.phone or '' }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ========================================== -->
+                <!-- Role -->
+                <!-- ========================================== -->
+
+                <h4>Role</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Role
+
+                        </label>
+
+                        <select
+                            name="role_id"
+                            class="form-select"
+                            required>
+
+                            {% for role in roles %}
+
+                            <option
+                                value="{{ role.id }}"
+                                {% if employee.role_id == role.id %}selected{% endif %}>
+
+                                {{ role.name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    class="btn btn-success btn-lg">
+
+                    Save Changes
+
+                </button>
+
+                <a
+                    href="{{ url_for('employee.view_employee', id=employee.id) }}"
+                    class="btn btn-secondary btn-lg">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

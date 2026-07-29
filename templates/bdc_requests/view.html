@@ -1,0 +1,473 @@
+{% extends "base.html" %}
+
+{% block title %}
+View BDC Request
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg">
+
+        <div class="card-header bg-primary text-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h2 class="mb-0">
+                        BDC Request
+                    </h2>
+
+                    <small>
+                        Ticket # {{ request.ticket_number }}
+                    </small>
+
+                </div>
+
+                <div>
+
+                    {% if request.status == "Completed" %}
+
+                        <span class="badge bg-success fs-6">
+                            Completed
+                        </span>
+
+                    {% elif request.status == "Cancelled" %}
+
+                        <span class="badge bg-danger fs-6">
+                            Cancelled
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+                            In Progress
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <!-- ===================================================== -->
+            <!-- Ticket Information -->
+            <!-- ===================================================== -->
+
+            <h4>Ticket Information</h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Ticket Number
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.ticket_number }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Date Created
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.created_at.strftime('%m/%d/%Y %I:%M %p') }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        BDC Agent
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.bdc_agent }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Status
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.status }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- Request Type -->
+            <!-- ===================================================== -->
+
+            <h4>Request Type</h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Request Type
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.request_type }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Other Request Type
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.other_request_type or '' }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- Customer -->
+            <!-- ===================================================== -->
+
+            <h4>Customer Information</h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.first_name }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Middle Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.middle_name }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.last_name }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Address
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.address }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.phone }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.email }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- Assignment -->
+            <!-- ===================================================== -->
+
+            <h4>Assignment</h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Sales Consultant
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.sales_rep }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Sales Manager
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.sales_manager }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- Vehicle -->
+            <!-- ===================================================== -->
+
+            <h4>Vehicle Information</h4>
+
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-2">
+
+                    <label class="form-label">
+                        Year
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.vehicle_year }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Make
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.vehicle_make }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Model
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.vehicle_model }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Trim
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.vehicle_trim }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Stock Number
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.stock_number }}"
+                        readonly>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        VIN
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        value="{{ request.vin }}"
+                        readonly>
+
+                </div>
+
+            </div>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- BDC Internal Notes -->
+            <!-- ===================================================== -->
+
+            <h4>BDC Internal Notes</h4>
+
+            <hr>
+
+            <textarea
+                class="form-control"
+                rows="5"
+                readonly>{{ request.bdc_internal_notes or '' }}</textarea>
+
+            <br>
+
+            <!-- ===================================================== -->
+            <!-- Resolution -->
+            <!-- ===================================================== -->
+
+            <h4>Resolution</h4>
+
+            <hr>
+
+            <textarea
+                class="form-control"
+                rows="6"
+                readonly>{{ request.resolution }}</textarea>
+
+            <br>
+
+            <a
+                href="{{ url_for('bdc.edit_request', id=request.id) }}"
+                class="btn btn-warning">
+
+                Edit Request
+
+            </a>
+
+            <a
+                href="{{ url_for('bdc.list_requests') }}"
+                class="btn btn-secondary">
+
+                Back to Queue
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

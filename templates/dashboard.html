@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h1>
+        Honda of Cleveland Heights
+    </h1>
+
+    <h3 class="text-primary">
+        Business Development Center Dashboard
+    </h3>
+
+    <hr>
+
+    <!-- Dashboard Statistics -->
+
+    <div class="row row-cols-1 row-cols-md-5 g-4 mb-4">
+
+        <!-- Total Requests -->
+
+        <div class="col">
+
+            <div class="card shadow text-center border-0">
+
+                <div class="card-body">
+
+                    <h1 class="text-dark">
+                        {{ total_requests }}
+                    </h1>
+
+                    <h5>Total Requests</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- In Progress -->
+
+        <div class="col">
+    <div class="card border-warning shadow-sm h-100">
+        <div class="card-body text-center">
+            <h5 class="card-title">1 Hour+</h5>
+            <h2 class="fw-bold text-warning">
+                {{ one_hour_count }}
+            </h2>
+        </div>
+    </div>
+</div>
+
+        <div class="col">
+
+            <div class="card shadow text-center border-0">
+
+                <div class="card-body">
+
+                    <h1 class="text-primary">
+                        {{ in_progress_count }}
+                    </h1>
+
+                    <h5>In Progress</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Completed -->
+
+        <div class="col">
+
+            <div class="card shadow text-center border-0">
+
+                <div class="card-body">
+
+                    <h1 class="text-success">
+                        {{ completed_count }}
+                    </h1>
+
+                    <h5>Completed</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Cancelled -->
+
+        <div class="col">
+
+            <div class="card shadow text-center border-0">
+
+                <div class="card-body">
+
+                    <h1 class="text-danger">
+                        {{ cancelled_count }}
+                    </h1>
+
+                    <h5>Cancelled</h5>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Latest Requests -->
+
+    <div class="card shadow border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <h4 class="mb-0">
+                Latest BDC Requests
+            </h4>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Ticket</th>
+                            <th>Customer</th>
+                            <th>Request Type</th>
+                            <th>Sales Rep</th>
+                            <th>Status</th>
+                            <th>Timer</th>
+                            <th>Date</th>
+                            <th>BDC Agent</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for request in latest_requests %}
+
+                        <tr>
+
+                            <td>
+                                <a href="{{ url_for('bdc.view_request', id=request.id) }}">
+                                    {{ request.ticket_number }}
+                                </a>
+                            </td>
+
+                            <td>
+                                {{ request.first_name }} {{ request.last_name }}
+                            </td>
+
+                            <td>
+                                {{ request.request_type }}
+                            </td>
+
+                            <td>
+                                {{ request.sales_rep or "-" }}
+                            </td>
+
+                            <td>
+
+                                {% if request.status == "In Progress" %}
+
+                                    <span class="badge bg-primary">
+                                        In Progress
+                                    </span>
+
+                                {% elif request.status == "Completed" %}
+
+                                    <span class="badge bg-success">
+                                        Completed
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger">
+                                        Cancelled
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                <span
+                                    class="live-timer"
+                                    data-started="{{ request.started_at.isoformat() if request.started_at else '' }}"
+                                    data-completed="{{ request.completed_at.isoformat() if request.completed_at else '' }}"
+                                    data-status="{{ request.status }}">
+                                    00:00:00
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ request.created_at.strftime("%m/%d/%Y") }}
+                            </td>
+
+                            <td>
+                                {{ request.bdc_agent }}
+                            </td>
+
+                        </tr>
+
+                    {% else %}
+
+                        <tr>
+
+                            <td colspan="8" class="text-center text-muted">
+                                No BDC requests available.
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Top Sales Consultants -->
+
+<div class="card shadow border-0 mt-4">
+
+    <div class="card-header bg-primary text-white">
+
+        <h4 class="mb-0">
+            Top Sales Consultants
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle text-center">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Rank</th>
+                        <th>Sales Consultant</th>
+                        <th>Completed Requests</th>
+                        <th>Average Completion Time</th>
+
+                    </tr>
+
+                <thead class="text-center">
+
+                <tbody class="text-center">
+
+                {% for consultant in top_sales_consultants %}
+
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+
+                        <td>{{ consultant.name }}</td>
+
+                        <td>{{ consultant.completed_requests }}</td>
+
+                        <td>
+                            {{ (consultant.average_seconds // 3600)|int }}h
+                            {{ ((consultant.average_seconds % 3600) // 60)|int }}m
+                            {{ (consultant.average_seconds % 60)|int }}s
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="4" class="text-center text-muted">
+                            No completed requests found.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Top Sales Managers -->
+
+<div class="card shadow border-0 mt-4">
+
+    <div class="card-header bg-success text-white">
+
+        <h4 class="mb-0">
+            Top Sales Managers
+        </h4>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle text-center">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Rank</th>
+                        <th>Sales Manager</th>
+                        <th>Completed Requests</th>
+                        <th>Average Completion Time</th>
+
+                    </tr>
+
+                <thead class="text-center">
+
+                <tbody class="text-center">
+
+                {% for manager in top_sales_managers %}
+
+                    <tr>
+
+                        <td>{{ loop.index }}</td>
+
+                        <td>{{ manager.name }}</td>
+
+                        <td>{{ manager.completed_requests }}</td>
+
+                        <td>
+                            {{ (manager.average_seconds // 3600)|int }}h
+                            {{ ((manager.average_seconds % 3600) // 60)|int }}m
+                            {{ (manager.average_seconds % 60)|int }}s
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="4" class="text-center text-muted">
+                            No completed requests found.
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

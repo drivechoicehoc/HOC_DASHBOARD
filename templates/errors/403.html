@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+Access Denied
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="text-center">
+
+        <h1 class="display-1 text-danger">
+            🚫
+        </h1>
+
+        <h2 class="fw-bold mb-3">
+            Access Denied
+        </h2>
+
+        <p class="lead text-muted">
+            You do not have permission to access this page.
+        </p>
+
+        <p class="text-muted">
+            If you believe this is an error, please contact your administrator.
+        </p>
+
+        <div class="mt-4">
+
+            <a href="{{ url_for('dashboard') }}"
+               class="btn btn-primary me-2">
+                Return to Dashboard
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="btn btn-outline-secondary">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

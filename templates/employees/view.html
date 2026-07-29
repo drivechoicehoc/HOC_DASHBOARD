@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}
+Employee Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Employee Profile</h2>
+        </div>
+
+        <div class="card-body">
+
+            <h4>Employee Information</h4>
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Employee No.</label>
+                    <p>{{ employee.employee_number }}</p>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Hire Date</label>
+                    <p>
+                    {% if employee.hire_date %}
+                        {{ employee.hire_date.strftime("%m/%d/%Y") }}
+                    {% else %}
+                        -
+                    {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Department</label>
+                    <p>{{ employee.department or "-" }}</p>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Status</label>
+                    <p>
+                    {% if employee.active %}
+                        <span class="badge bg-success rounded-pill">Active</span>
+                    {% else %}
+                        <span class="badge bg-danger rounded-pill">Inactive</span>
+                    {% endif %}
+                    </p>
+                </div>
+
+            </div>
+
+            <br>
+
+            <h4>Personal Information</h4>
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">First Name</label>
+                    <p>{{ employee.first_name }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Middle Name</label>
+                    <p>{{ employee.middle_name or "-" }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Last Name</label>
+                    <p>{{ employee.last_name }}</p>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Email</label>
+                    <p>{{ employee.email or "-" }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Phone</label>
+                    <p>{{ employee.phone or "-" }}</p>
+                </div>
+
+            </div>
+
+            <br>
+
+            <h4>Account Information</h4>
+            <hr>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Username</label>
+                    <p>{{ employee.username }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Role</label>
+                    <p>{{ employee.role.name if employee.role else "-" }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Last Login</label>
+                    <p>
+                    {% if employee.last_login %}
+                        {{ employee.last_login.strftime("%m/%d/%Y %I:%M %p") }}
+                    {% else %}
+                        Never
+                    {% endif %}
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Created</label>
+                    <p>{{ employee.created_at.strftime("%m/%d/%Y %I:%M %p") }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Last Updated</label>
+                    <p>
+                    {% if employee.updated_at %}
+                        {{ employee.updated_at.strftime("%m/%d/%Y %I:%M %p") }}
+                    {% else %}
+                        -
+                    {% endif %}
+                    </p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Updated By</label>
+                    <p>{{ employee.updated_by or "-" }}</p>
+                </div>
+
+            </div>
+
+            <hr class="mt-4">
+
+            <div class="d-flex gap-2 flex-wrap">
+
+                <a href="{{ url_for('employee.employee_list') }}" class="btn btn-secondary">
+                    Back to Employee List
+                </a>
+
+                <a href="{{ url_for('employee.edit_employee', id=employee.id) }}" class="btn btn-primary">
+                    Edit Employee
+                </a>
+
+                <a href="{{ url_for('employee.reset_password', id=employee.id) }}" class="btn btn-warning">
+                    Reset Password
+                </a>
+
+                <a href="{{ url_for('employee.delete_employee', id=employee.id) }}"
+                   class="btn btn-danger">
+                    Delete Employee
+                </a>
+
+                {% if employee.active %}
+
+                <form action="{{ url_for('employee.deactivate_employee', id=employee.id) }}"
+                      method="POST"
+                      class="d-inline">
+
+                    <button type="submit"
+                            class="btn btn-danger"
+                            onclick="return confirm('Are you sure you want to deactivate this employee?');">
+                        Deactivate Employee
+                    </button>
+
+                </form>
+
+                {% else %}
+
+                <form action="{{ url_for('employee.activate_employee', id=employee.id) }}"
+                      method="POST"
+                      class="d-inline">
+
+                    <button type="submit"
+                            class="btn btn-success"
+                            onclick="return confirm('Are you sure you want to activate this employee?');">
+                        Activate Employee
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

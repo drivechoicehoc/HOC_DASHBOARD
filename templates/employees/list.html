@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block title %}
+Employee Management
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="mb-0">
+                Employee Management
+            </h2>
+
+            <small class="text-muted">
+                Honda of Cleveland Heights
+            </small>
+
+        </div>
+
+        <div>
+
+            <a href="{{ url_for('employee.add_employee') }}"
+               class="btn btn-primary">
+
+                New Employee
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Search -->
+    <!-- ========================================== -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-body">
+
+            <form
+                method="GET"
+                action="{{ url_for('employee.employee_list') }}"
+                class="row g-3">
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Search Employee
+                    </label>
+
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Employee No., Name, Username"
+                        value="{{ search }}">
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Department
+                    </label>
+
+                    <select
+                        name="department"
+                        class="form-select">
+
+                        <option value="">All Departments</option>
+
+                        <option value="Executive Management"
+                            {% if selected_department=="Executive Management" %}selected{% endif %}>
+                            Executive Management
+                        </option>
+
+                        <option value="Dealership Management"
+                            {% if selected_department=="Dealership Management" %}selected{% endif %}>
+                            Dealership Management
+                        </option>
+
+                        <option value="Business Development Center (BDC)"
+                            {% if selected_department=="Business Development Center (BDC)" %}selected{% endif %}>
+                            Business Development Center (BDC)
+                        </option>
+
+                        <option value="Sales"
+                            {% if selected_department=="Sales" %}selected{% endif %}>
+                            Sales
+                        </option>
+
+                        <option value="Finance"
+                            {% if selected_department=="Finance" %}selected{% endif %}>
+                            Finance
+                        </option>
+
+                        <option value="Administration"
+                            {% if selected_department=="Administration" %}selected{% endif %}>
+                            Administration
+                        </option>
+
+                        <option value="Information Technology"
+                            {% if selected_department=="Information Technology" %}selected{% endif %}>
+                            Information Technology
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Role
+                    </label>
+
+                    <select
+                        name="role"
+                        class="form-select">
+
+                        <option value="">All Roles</option>
+
+                        {% for role in roles %}
+
+                        <option
+                            value="{{ role.id }}"
+                            {% if selected_role|int == role.id %}selected{% endif %}>
+
+                            {{ role.name }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-2 d-grid">
+
+                    <label class="form-label">
+                        &nbsp;
+                    </label>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Employee Table -->
+    <!-- ========================================== -->
+
+    <div class="card shadow">
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover table-striped align-middle mb-0">
+
+                <thead class="table-dark">
+
+                <tr>
+
+                    <th width="120">
+                        Employee No.
+                    </th>
+
+                    <th>
+                        Employee
+                    </th>
+
+                    <th width="250">
+                        Department
+                    </th>
+
+                    <th width="220">
+                        Role
+                    </th>
+
+                    <th width="120">
+                        Status
+                    </th>
+
+                    <th width="180">
+                        Last Login
+                    </th>
+
+                    <th width="170" class="text-center">
+                        Actions
+                    </th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% if employees %}
+
+                    {% for employee in employees %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ employee.employee_number }}
+
+                        </td>
+
+                        <td>
+
+                            <strong>
+
+                                {{ employee.full_name }}
+
+                            </strong>
+
+                            <br>
+
+                            <small class="text-muted">
+
+                                {{ employee.username }}
+
+                            </small>
+
+                        </td>
+
+                        <td>
+
+                            {{ employee.department or "-" }}
+
+                        </td>
+
+                        <td>
+
+                            {{ employee.role.name if employee.role else "-" }}
+
+                        </td>
+
+                        <td>
+
+                            {% if employee.active %}
+
+                                <span class="badge bg-success rounded-pill">
+
+                                    Active
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-danger rounded-pill">
+
+                                    Inactive
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if employee.last_login %}
+
+                                {{ employee.last_login.strftime("%m/%d/%Y %I:%M %p") }}
+
+                            {% else %}
+
+                                Never
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <div class="dropdown">
+
+                                <button
+                                    class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                    type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+
+                                    Actions
+
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li>
+
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ url_for('employee.view_employee', id=employee.id) }}">
+
+                                            View Employee
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ url_for('employee.edit_employee', id=employee.id) }}">
+
+                                            Edit Employee
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <hr class="dropdown-divider">
+
+                                    </li>
+
+                                    <li>
+
+                                        <a
+                                            class="dropdown-item"
+                                            href="{{ url_for('employee.reset_password', id=employee.id) }}">
+
+                                            Reset Password
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+
+                                        <hr class="dropdown-divider">
+
+                                    </li>
+
+
+                                </ul>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center py-4">
+
+                            No employees found.
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

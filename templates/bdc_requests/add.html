@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="card shadow-lg border-0">
+
+<div class="card-header bg-primary text-white">
+<h2 class="mb-0">BDC Request</h2>
+</div>
+
+<div class="card-body">
+
+<form method="POST">
+
+<h4>Ticket Information</h4>
+<hr>
+
+<div class="row">
+<div class="col-md-4">
+<label class="form-label">Ticket Number</label>
+<input type="text" class="form-control" value="{{ ticket_number }}" readonly>
+</div>
+
+<div class="col-md-4">
+<label class="form-label">Date Created</label>
+<input type="text" class="form-control" value="{{ created_at }}" readonly>
+</div>
+
+<div class="col-md-4">
+<label class="form-label">BDC Agent</label>
+<input type="text" class="form-control" value="{{ bdc_agent }}" readonly>
+</div>
+</div>
+
+<br>
+
+<h4>Request Type</h4>
+<hr>
+
+<div class="mb-3">
+<label class="form-label">Request Type *</label>
+
+<select id="request_type" name="request_type" class="form-select" required>
+<option value="">Select Request Type</option>
+<option>OTD Price</option>
+<option>OTD Price + Trade-in</option>
+<option>Lease Option</option>
+<option>Vehicle Appraisal</option>
+<option>Vehicle Availability</option>
+<option>Sales Representative Assistance</option>
+<option>Sales Manager Assistance</option>
+<option>General Manager Assistance</option>
+<option>Dealer Trade Price</option>
+<option>Retailer Price</option>
+<option>Others</option>
+</select>
+
+</div>
+
+<div id="other_request_div" style="display:none;">
+
+<label class="form-label">Please Specify</label>
+
+<input
+    type="text"
+    name="other_request_type"
+    class="form-control">
+
+</div>
+
+<br>
+
+<h4>Customer Information</h4>
+<hr>
+
+<div class="row">
+
+<div class="col-md-4">
+<label>First Name *</label>
+<input name="first_name" class="form-control" required>
+</div>
+
+<div class="col-md-4">
+<label>Middle Name</label>
+<input name="middle_name" class="form-control">
+</div>
+
+<div class="col-md-4">
+<label>Last Name *</label>
+<input name="last_name" class="form-control" required>
+</div>
+
+</div>
+
+<br>
+
+<div class="mb-3">
+
+<label>Address</label>
+
+<input
+    name="address"
+    class="form-control">
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6">
+<label>Phone Number</label>
+<input name="phone" class="form-control">
+</div>
+
+<div class="col-md-6">
+<label>Email Address</label>
+<input type="email" name="email" class="form-control">
+</div>
+
+</div>
+
+<br>
+
+<h4>Vehicle Information</h4>
+<hr>
+
+<div class="row">
+
+<div class="col-md-3">
+<label>Year</label>
+<input name="vehicle_year" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Make</label>
+<input name="vehicle_make" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Model</label>
+<input name="vehicle_model" class="form-control">
+</div>
+
+<div class="col-md-3">
+<label>Trim</label>
+<input name="vehicle_trim" class="form-control">
+</div>
+
+</div>
+
+<br>
+
+<div class="row">
+
+<div class="col-md-6">
+<label>Stock Number</label>
+<input name="stock_number" class="form-control">
+</div>
+
+<div class="col-md-6">
+<label>VIN</label>
+<input name="vin" class="form-control">
+</div>
+
+</div>
+
+<br>
+
+<h4>BDC Internal Notes</h4>
+<hr>
+
+<div class="mb-3">
+
+<label class="form-label">BDC Internal Notes</label>
+
+<textarea
+    name="bdc_internal_notes"
+    class="form-control"
+    rows="5"
+    placeholder="Record important customer information, requests, preferences, or instructions that will assist the assigned Sales Consultant, Sales Manager, or General Manager. This information is for internal dealership use only."></textarea>
+
+<div class="form-text">
+Record customer requests, preferences, special instructions, or any information that will help the assigned team member better assist the customer.
+</div>
+
+</div>
+
+<br>
+
+<h4>Assignment</h4>
+<hr>
+
+<div class="row">
+
+<div class="col-md-6">
+
+<label>Sales Consultant</label>
+
+<select name="sales_rep" class="form-select">
+
+<option value="">Select Sales Consultant</option>
+
+{% for rep in sales_reps %}
+
+<option value="{{ rep.first_name }} {{ rep.last_name }}">
+{{ rep.first_name }} {{ rep.last_name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+<div class="col-md-6">
+
+<label>Sales Manager</label>
+
+<select name="sales_manager" class="form-select">
+
+<option value="">Select Sales Manager</option>
+
+{% for manager in sales_managers %}
+
+<option value="{{ manager.first_name }} {{ manager.last_name }}">
+{{ manager.first_name }} {{ manager.last_name }}
+</option>
+
+{% endfor %}
+
+</select>
+
+</div>
+
+</div>
+
+<br>
+
+<h4>Resolution</h4>
+<hr>
+
+<textarea
+class="form-control"
+rows="4"
+readonly>This section will be completed by the assigned Sales Consultant, Sales Manager, or General Manager after the request has been resolved.</textarea>
+
+<br><br>
+
+<button class="btn btn-success btn-lg" type="submit">
+Save Request
+</button>
+
+<a href="{{ url_for('bdc.list_requests') }}" class="btn btn-secondary btn-lg">
+Cancel
+</a>
+
+</form>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+const requestType = document.getElementById("request_type");
+const otherRequestDiv = document.getElementById("other_request_div");
+
+function toggleOtherRequest() {
+
+    otherRequestDiv.style.display =
+        requestType.value === "Others"
+            ? "block"
+            : "none";
+
+}
+
+requestType.addEventListener("change", toggleOtherRequest);
+
+toggleOtherRequest();
+
+});
+
+</script>
+
+{% endblock %}

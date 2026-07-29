@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>
+        {% block title %}Honda of Cleveland Heights BDC Dashboard{% endblock %}
+    </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        body{
+            margin:0;
+            background:#eef2f7;
+            font-family:Segoe UI, Arial, sans-serif;
+        }
+
+        .sidebar{
+            position:fixed;
+            top:0;
+            left:0;
+            width:280px;
+            height:100vh;
+            background:#0b1f3a;
+            color:#fff;
+            overflow-y:auto;
+            padding:25px;
+        }
+
+        .sidebar h2{
+            font-weight:bold;
+            margin-bottom:30px;
+        }
+
+        .sidebar h6{
+            margin-top:25px;
+            color:#9eb2ce;
+            text-transform:uppercase;
+            font-size:12px;
+            letter-spacing:1px;
+        }
+
+        .sidebar a{
+            display:block;
+            color:#fff;
+            text-decoration:none;
+            padding:12px;
+            border-radius:8px;
+            margin-bottom:6px;
+            transition:.2s;
+        }
+
+        .sidebar a:hover{
+            background:#17365d;
+        }
+
+        .sidebar a.active{
+            background:#1f4f86;
+            font-weight:bold;
+        }
+
+        .content{
+            margin-left:300px;
+            padding:30px;
+        }
+
+        .page-card{
+            background:#fff;
+            border-radius:15px;
+            padding:30px;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+        }
+
+        table th{
+            white-space:nowrap;
+        }
+
+        .live-timer{
+            font-weight:600;
+            font-family:Consolas, monospace;
+        }
+
+    </style>
+
+    {% block styles %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h2>HOC BDC</h2>
+
+    <h6>Dashboard</h6>
+
+    {% if has_permission("dashboard") %}
+    <a href="{{ url_for('dashboard') }}"
+       class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
+        Dashboard
+    </a>
+    {% endif %}
+
+    <h6>BDC Operations</h6>
+
+    {% if has_permission("new_bdc_request") %}
+    <a href="{{ url_for('bdc.add_request') }}"
+       class="{% if request.endpoint == 'bdc.add_request' %}active{% endif %}">
+        New BDC Request
+    </a>
+    {% endif %}
+
+    {% if has_permission("bdc_request_queue") %}
+    <a href="{{ url_for('bdc.list_requests') }}"
+       class="{% if request.endpoint == 'bdc.list_requests' %}active{% endif %}">
+        BDC Request Queue
+    </a>
+    {% endif %}
+
+    <h6>Management</h6>
+
+    {% if has_permission("employee_management") %}
+    <a href="{{ url_for('employee.employee_list') }}"
+       class="{% if request.endpoint == 'employee.employee_list' %}active{% endif %}">
+        Employee Management
+    </a>
+    {% endif %}
+
+    {% if has_permission("reports") %}
+    <a href="{{ url_for('reports.reports') }}"
+       class="{% if request.endpoint == 'reports.reports' %}active{% endif %}">
+        Reports
+    </a>
+    {% endif %}
+
+    {% if has_permission("settings") %}
+    <a href="{{ url_for('reports.role_access_management') }}"
+       class="{% if request.endpoint == 'reports.role_access_management' %}active{% endif %}">
+        Settings
+    </a>
+    {% endif %}
+
+    <hr>
+
+    <a href="{{ url_for('logout') }}">
+        Logout
+    </a>
+
+</div>
+
+<div class="content">
+
+    <div class="page-card">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+
+                    <div class="alert alert-{{ category }} alert-dismissible fade show"
+                         role="alert">
+
+                        {{ message }}
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert"
+                                aria-label="Close">
+                        </button>
+
+                    </div>
+
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Live Timer -->
+<script src="{{ url_for('static', filename='js/live_timer.js') }}"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const alerts = document.querySelectorAll(".alert");
+
+    alerts.forEach(function(alertElement) {
+
+        setTimeout(function () {
+
+            const alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+            alert.close();
+
+        }, 3000);
+
+    });
+
+});
+</script>
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+{% extends "base.html" %}
+
+{% block title %}
+New Employee
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-primary text-white">
+
+            <h2 class="mb-0">
+                New Employee
+            </h2>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <!-- ========================================== -->
+                <!-- Employee Information -->
+                <!-- ========================================== -->
+
+                <h4>Employee Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Employee No.
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ employee_number }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Hire Date
+
+                        </label>
+
+                        <input
+                            type="date"
+                            name="hire_date"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Department
+
+                        </label>
+
+                        <select
+                            name="department"
+                            class="form-select">
+
+                            <option value="">Select Department</option>
+
+                            <option>Executive Management</option>
+                            <option>Dealership Management</option>
+                            <option>Business Development Center (BDC)</option>
+                            <option>Sales</option>
+                            <option>Finance</option>
+                            <option>Administration</option>
+                            <option>Information Technology</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Status
+
+                        </label>
+
+                        <select
+                            name="active"
+                            class="form-select">
+
+                            <option value="1" selected>
+
+                                Active
+
+                            </option>
+
+                            <option value="0">
+
+                                Inactive
+
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ========================================== -->
+                <!-- Personal Information -->
+                <!-- ========================================== -->
+
+                <h4>Personal Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            First Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Middle Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="middle_name"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Last Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Email
+
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Phone
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            class="form-control">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ========================================== -->
+                <!-- Login Information -->
+                <!-- ========================================== -->
+
+                <h4>Login Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Username
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Password
+
+                        </label>
+
+                        <input
+                            type="password"
+                            name="password"
+                            class="form-control"
+                            required>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Role
+
+                        </label>
+
+                        <select
+                            name="role_id"
+                            class="form-select"
+                            required>
+
+                            <option value="">Select Role</option>
+
+                            {% for role in roles %}
+
+                            <option value="{{ role.id }}">
+
+                                {{ role.name }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    class="btn btn-success btn-lg">
+
+                    Save Employee
+
+                </button>
+
+                <a
+                    href="{{ url_for('employee.employee_list') }}"
+                    class="btn btn-secondary btn-lg">
+
+                    Cancel
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

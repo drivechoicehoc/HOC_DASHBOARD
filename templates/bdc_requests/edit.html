@@ -1,0 +1,631 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit BDC Request
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card shadow-lg border-0">
+
+        <div class="card-header bg-warning">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h2 class="mb-0">
+
+                        Edit BDC Request
+
+                    </h2>
+
+                    <small>
+
+                        Ticket # {{ request.ticket_number }}
+
+                    </small>
+
+                </div>
+
+                <div>
+
+                    {% if request.status == "Completed" %}
+
+                        <span class="badge bg-success fs-6">
+
+                            Completed
+
+                        </span>
+
+                    {% elif request.status == "Cancelled" %}
+
+                        <span class="badge bg-danger fs-6">
+
+                            Cancelled
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-warning text-dark fs-6">
+
+                            In Progress
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                <!-- ============================================ -->
+                <!-- Ticket Information -->
+                <!-- ============================================ -->
+
+                <h4>Ticket Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Ticket Number
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ request.ticket_number }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Date Created
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ request.created_at.strftime('%m/%d/%Y %I:%M %p') }}"
+                            readonly>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            BDC Agent
+
+                        </label>
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            value="{{ request.bdc_agent }}"
+                            readonly>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Request Type -->
+                <!-- ============================================ -->
+
+                <h4>Request Type</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Request Type
+
+                        </label>
+
+                        <select
+                            name="request_type"
+                            id="request_type"
+                            class="form-select">
+
+                            {% set request_types = [
+
+                                "OTD Price",
+                                "OTD Price + Trade-in",
+                                "Lease Option",
+                                "Vehicle Appraisal",
+                                "Vehicle Availability",
+                                "Sales Representative Assistance",
+                                "Sales Manager Assistance",
+                                "General Manager Assistance",
+                                "Dealer Trade Price",
+                                "Retailer Price",
+                                "Others"
+
+                            ] %}
+
+                            {% for item in request_types %}
+
+                            <option
+                                value="{{ item }}"
+                                {% if request.request_type == item %}selected{% endif %}>
+
+                                {{ item }}
+
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Please Specify
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="other_request_type"
+                            id="other_request_type"
+                            class="form-control"
+                            value="{{ request.other_request_type or '' }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Customer Information -->
+                <!-- ============================================ -->
+
+                <h4>Customer Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            First Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            class="form-control"
+                            value="{{ request.first_name }}">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Middle Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="middle_name"
+                            class="form-control"
+                            value="{{ request.middle_name }}">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Last Name
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            class="form-control"
+                            value="{{ request.last_name }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Address
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="address"
+                            class="form-control"
+                            value="{{ request.address }}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Phone Number
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            class="form-control"
+                            value="{{ request.phone }}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Email Address
+
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            class="form-control"
+                            value="{{ request.email }}">
+                                        </div>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Assignment -->
+                <!-- ============================================ -->
+
+                <h4>Assignment</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Sales Consultant
+
+                        </label>
+
+                        <select
+                            name="sales_rep"
+                            class="form-select">
+
+                            <option value="">
+                                Select Sales Representative
+                            </option>
+
+                            {% for rep in sales_reps %}
+
+                                {% set fullname = rep.first_name ~ " " ~ rep.last_name %}
+
+                                <option
+                                    value="{{ fullname }}"
+                                    {% if request.sales_rep == fullname %}selected{% endif %}>
+
+                                    {{ fullname }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Sales Manager
+
+                        </label>
+
+                        <select
+                            name="sales_manager"
+                            class="form-select">
+
+                            <option value="">
+                                Select Sales Manager
+                            </option>
+
+                            {% for manager in sales_managers %}
+
+                                {% set fullname = manager.first_name ~ " " ~ manager.last_name %}
+
+                                <option
+                                    value="{{ fullname }}"
+                                    {% if request.sales_manager == fullname %}selected{% endif %}>
+
+                                    {{ fullname }}
+
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Vehicle Information -->
+                <!-- ============================================ -->
+
+                <h4>Vehicle Information</h4>
+
+                <hr>
+
+                <div class="row">
+
+                    <div class="col-md-2">
+
+                        <label class="form-label">
+
+                            Year
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="vehicle_year"
+                            class="form-control"
+                            value="{{ request.vehicle_year }}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Make
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="vehicle_make"
+                            class="form-control"
+                            value="{{ request.vehicle_make }}">
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <label class="form-label">
+
+                            Model
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="vehicle_model"
+                            class="form-control"
+                            value="{{ request.vehicle_model }}">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label class="form-label">
+
+                            Trim
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="vehicle_trim"
+                            class="form-control"
+                            value="{{ request.vehicle_trim }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            Stock Number
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="stock_number"
+                            class="form-control"
+                            value="{{ request.stock_number }}">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">
+
+                            VIN
+
+                        </label>
+
+                        <input
+                            type="text"
+                            name="vin"
+                            class="form-control"
+                            value="{{ request.vin }}">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Resolution -->
+                <!-- ============================================ -->
+
+                <h4>Resolution</h4>
+
+                <hr>
+
+                <textarea
+                    name="resolution"
+                    rows="6"
+                    class="form-control">{{ request.resolution }}</textarea>
+
+                <br>
+
+                <!-- ============================================ -->
+                <!-- Status -->
+                <!-- ============================================ -->
+
+                <h4>Status</h4>
+
+                <hr>
+
+                <select
+                    name="status"
+                    class="form-select">
+
+                    <option
+                        value="In Progress"
+                        {% if request.status == "In Progress" %}selected{% endif %}>
+
+                        In Progress
+
+                    </option>
+
+                    <option
+                        value="Completed"
+                        {% if request.status == "Completed" %}selected{% endif %}>
+
+                        Completed
+
+                    </option>
+
+                    <option
+                        value="Cancelled"
+                        {% if request.status == "Cancelled" %}selected{% endif %}>
+
+                        Cancelled
+
+                    </option>
+
+                </select>
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    class="btn btn-success btn-lg">
+
+                    Save Changes
+
+                </button>
+
+                <a
+                    href="{{ url_for('bdc.list_requests') }}"
+                    class="btn btn-secondary btn-lg">
+
+                    Back
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function toggleOtherRequest() {
+
+    const requestType = document.getElementById("request_type");
+    const otherField = document.getElementById("other_request_type");
+
+    if (requestType.value === "Others") {
+
+        otherField.disabled = false;
+
+    } else {
+
+        otherField.value = "";
+        otherField.disabled = true;
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    toggleOtherRequest();
+
+    document
+        .getElementById("request_type")
+        .addEventListener("change", toggleOtherRequest);
+
+});
+
+</script>
+
+{% endblock %}
