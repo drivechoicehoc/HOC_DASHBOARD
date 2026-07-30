@@ -395,6 +395,8 @@ def edit_request(id):
         # Status
         new_status = request.form.get("status")
         bdc_request.status = new_status
+        if new_status == "In Progress" and not bdc_request.started_at:
+            bdc_request.started_at = datetime.now()
 
         if new_status == "Completed" and not bdc_request.completed_at:
             bdc_request.completed_at = datetime.now()
