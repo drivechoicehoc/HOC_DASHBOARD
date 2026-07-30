@@ -89,4 +89,16 @@ function updateTimers() {
 
 updateTimers();
 
-setInterval(updateTimers, 1000);
+const timerInterval = setInterval(() => {
+
+    updateTimers();
+
+    const runningTimers = document.querySelectorAll(
+        '.live-timer[data-status="In Progress"]'
+    );
+
+    if (runningTimers.length === 0) {
+        clearInterval(timerInterval);
+    }
+
+}, 1000);

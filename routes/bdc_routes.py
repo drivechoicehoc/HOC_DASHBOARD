@@ -399,7 +399,7 @@ def edit_request(id):
             bdc_request.started_at = datetime.now(timezone.utc)
 
         if new_status == "Completed" and not bdc_request.completed_at:
-            bdc_request.started_at = datetime.now(timezone.utc)
+            bdc_request.completed_at = datetime.now(timezone.utc)
 
         bdc_request.updated_at = datetime.now(timezone.utc)
         bdc_request.updated_by = session["username"]
