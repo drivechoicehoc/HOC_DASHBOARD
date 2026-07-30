@@ -201,8 +201,8 @@ Dashboard
                             <td>
                                 <span
                                     class="live-timer"
-                                    data-started="{{ request.started_at.isoformat() if request.started_at else '' }}"
-                                    data-completed="{{ request.completed_at.isoformat() if request.completed_at else '' }}"
+                                    data-started="{{ request.started_at.isoformat() ~ 'Z' if request.started_at else '' }}"
+                                    data-completed="{{ request.completed_at.isoformat() ~ 'Z' if request.completed_at else '' }}"
                                     data-status="{{ request.status }}">
                                     00:00:00
                                 </span>

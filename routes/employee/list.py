@@ -11,6 +11,8 @@ from sqlalchemy.orm import joinedload
 
 from models.user import User
 from models.role import Role
+from datetime import timezone
+from zoneinfo import ZoneInfo
 
 
 def employee_list():
@@ -82,6 +84,16 @@ def employee_list():
         .order_by(User.employee_number)
         .all()
     )
+
+    cleveland_tz = ZoneInfo("America/New_York")
+
+    for employee in employees:
+        if employee.last_login:
+            employee.last_login = (
+                employee.last_login
+                .replace(tzinfo=timezone.utc)
+                .astimezone(cleveland_tz)
+            )
 
     return render_template(
         "employees/list.html",

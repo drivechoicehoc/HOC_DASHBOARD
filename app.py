@@ -7,13 +7,14 @@ from flask import (
     session
 )
 
+from zoneinfo import ZoneInfo
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 from config import Config
 from database.database import db
 from utils.permissions import has_permission
 from utils.decorators import permission_required
-from datetime import datetime
+from datetime import datetime, timezone
 
 from models.user import User
 from models.role import Role
@@ -99,7 +100,7 @@ def login():
             if user.active and password_ok:
 
                 # Update last login
-                user.last_login = datetime.now()
+                user.last_login = datetime.now(timezone.utc)
                 db.session.commit()
 
                 session["user_id"] = user.id
