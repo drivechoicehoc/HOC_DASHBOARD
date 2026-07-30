@@ -105,7 +105,7 @@
                 <td>{{ request.sales_rep or "-" }}</td>
                 <td>{{ request.sales_manager or "-" }}</td>
                 <td>{% if request.status=="Completed" %}<span class="badge bg-success">{{ request.status }}</span>{% elif request.status=="Cancelled" %}<span class="badge bg-danger">{{ request.status }}</span>{% else %}<span class="badge bg-warning text-dark">{{ request.status }}</span>{% endif %}</td>
-                <td><span class="live-timer" data-started="{{ request.started_at.isoformat() if request.started_at else '' }}" data-completed="{{ request.completed_at.isoformat() if request.completed_at else '' }}" data-status="{{ request.status }}">00:00:00</span></td>
+                <td><span class="live-timer" data-started="{{ request.started_at.isoformat() ~ 'Z' if request.started_at else '' }}" data-completed="{{ request.completed_at.isoformat() ~ 'Z' if request.completed_at else '' }}" data-status="{{ request.status }}">00:00:00</span></td>
                 <td>{{ request.created_at.strftime("%m/%d/%Y %I:%M %p") }}</td>
                 <td>{{ request.bdc_agent }}</td>
                 <td>
