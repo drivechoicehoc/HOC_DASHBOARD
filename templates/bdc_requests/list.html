@@ -50,15 +50,6 @@
                 </select>
             </div>
 
-            <div class="col-md-2">
-                <label class="form-label">Sales Manager</label>
-                <select class="form-select" name="sales_manager">
-                    <option value="">All</option>
-                    {% for mgr in sales_managers %}
-                    <option value="{{ mgr[0] }}" {% if selected_sales_manager==mgr[0] %}selected{% endif %}>{{ mgr[0] }}</option>
-                    {% endfor %}
-                </select>
-            </div>
 
             <div class="col-md-2">
                 <label class="form-label">Status</label>
@@ -88,7 +79,6 @@
                 <th>Customer</th>
                 <th>Request Type</th>
                 <th>Sales Rep</th>
-                <th>Sales Manager</th>
                 <th>Status</th>
                 <th>Timer</th>
                 <th>Created</th>
@@ -103,7 +93,6 @@
                 <td><strong>{{ request.first_name }} {% if request.middle_name %}{{ request.middle_name }} {% endif %}{{ request.last_name }}</strong><br><small>{{ request.phone }}</small>{% if request.email %}<br><small>{{ request.email }}</small>{% endif %}</td>
                 <td>{% if request.request_type=="Others" %}<strong>Others</strong>{% if request.other_request_type %}<br><small>{{ request.other_request_type }}</small>{% endif %}{% else %}{{ request.request_type }}{% endif %}</td>
                 <td>{{ request.sales_rep or "-" }}</td>
-                <td>{{ request.sales_manager or "-" }}</td>
                 <td>{% if request.status=="Completed" %}<span class="badge bg-success">{{ request.status }}</span>{% elif request.status=="Cancelled" %}<span class="badge bg-danger">{{ request.status }}</span>{% else %}<span class="badge bg-warning text-dark">{{ request.status }}</span>{% endif %}</td>
                 <td><span class="live-timer" data-started="{{ request.started_at.isoformat() ~ 'Z' if request.started_at else '' }}" data-completed="{{ request.completed_at.isoformat() ~ 'Z' if request.completed_at else '' }}" data-status="{{ request.status }}">00:00:00</span></td>
                 <td>{{ request.created_at.strftime("%m/%d/%Y %I:%M %p") }}</td>

@@ -18,75 +18,278 @@
 
     <style>
 
-        body{
-            margin:0;
-            background:#eef2f7;
-            font-family:Segoe UI, Arial, sans-serif;
+        body {
+            margin: 0;
+            background: #eef2f7;
+            font-family: Segoe UI, Arial, sans-serif;
         }
 
-        .sidebar{
-            position:fixed;
-            top:0;
-            left:0;
-            width:280px;
-            height:100vh;
-            background:#0b1f3a;
-            color:#fff;
-            overflow-y:auto;
-            padding:25px;
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: #0b1f3a;
+            color: #fff;
+            overflow-y: auto;
+            padding: 25px;
+            z-index: 1000;
         }
 
-        .sidebar h2{
-            font-weight:bold;
-            margin-bottom:30px;
+        .sidebar h2 {
+            font-weight: bold;
+            margin-bottom: 30px;
         }
 
-        .sidebar h6{
-            margin-top:25px;
-            color:#9eb2ce;
-            text-transform:uppercase;
-            font-size:12px;
-            letter-spacing:1px;
+        .sidebar h6 {
+            margin-top: 25px;
+            color: #9eb2ce;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
         }
 
-        .sidebar a{
-            display:block;
-            color:#fff;
-            text-decoration:none;
-            padding:12px;
-            border-radius:8px;
-            margin-bottom:6px;
-            transition:.2s;
+        .sidebar a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            transition: .2s;
         }
 
-        .sidebar a:hover{
-            background:#17365d;
+        .sidebar a:hover {
+            background: #17365d;
         }
 
-        .sidebar a.active{
-            background:#1f4f86;
-            font-weight:bold;
+        .sidebar a.active {
+            background: #1f4f86;
+            font-weight: bold;
         }
 
-        .content{
-            margin-left:300px;
-            padding:30px;
+        .content {
+            margin-left: 300px;
+            padding: 30px;
         }
 
-        .page-card{
-            background:#fff;
-            border-radius:15px;
-            padding:30px;
-            box-shadow:0 10px 25px rgba(0,0,0,.08);
+        .page-card {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
         }
 
-        table th{
-            white-space:nowrap;
+        table th {
+            white-space: nowrap;
         }
 
-        .live-timer{
-            font-weight:600;
-            font-family:Consolas, monospace;
+        .live-timer {
+            font-weight: 600;
+            font-family: Consolas, monospace;
+        }
+
+
+        /* =====================================================
+           MOBILE RESPONSIVE DESIGN
+           ===================================================== */
+
+        @media (max-width: 768px) {
+
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+
+            /* =================================================
+               SIDEBAR
+               ================================================= */
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                min-height: 0;
+                padding: 15px;
+                overflow: visible;
+            }
+
+            .sidebar h2 {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .sidebar h6 {
+                margin-top: 15px;
+            }
+
+            .sidebar a {
+                padding: 10px;
+                margin-bottom: 4px;
+            }
+
+
+            /* =================================================
+               MAIN CONTENT
+               ================================================= */
+
+            .content {
+                margin-left: 0;
+                width: 100%;
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            .page-card {
+                width: 100%;
+                max-width: 100%;
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+
+            /* =================================================
+               HEADINGS
+               ================================================= */
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            h3 {
+                font-size: 20px;
+            }
+
+            h4 {
+                font-size: 18px;
+            }
+
+
+            /* =================================================
+               BOOTSTRAP COLUMNS
+               ================================================= */
+
+            .row > [class*="col-md-"] {
+                width: 100%;
+            }
+
+
+            /* =================================================
+               DASHBOARD STATISTICS
+               ================================================= */
+
+            .row-cols-md-5 > .col,
+            .row-cols-md-4 > .col {
+                width: 100%;
+            }
+
+
+            /* =================================================
+               FORMS
+               ================================================= */
+
+            .form-control,
+            .form-select {
+                width: 100%;
+                font-size: 16px;
+            }
+
+            .btn {
+                font-size: 16px;
+            }
+
+
+            /* =================================================
+               TABLES
+               ================================================= */
+
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table-responsive table {
+                min-width: 700px;
+            }
+
+            table th,
+            table td {
+                white-space: nowrap;
+            }
+
+
+            /* =================================================
+               CARDS
+               ================================================= */
+
+            .card {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .card-body {
+                padding: 15px;
+            }
+
+
+            /* =================================================
+               LIVE TIMER
+               ================================================= */
+
+            .live-timer {
+                white-space: nowrap;
+                font-size: 14px;
+            }
+
+
+            /* =================================================
+               PAGE HEADER
+               ================================================= */
+
+            .d-flex.justify-content-between {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .d-flex.justify-content-between > .btn,
+            .d-flex.justify-content-between > a {
+                width: 100%;
+            }
+
+
+            /* =================================================
+               SEARCH / FILTER FORMS
+               ================================================= */
+
+            form.row.g-3 > [class*="col-md-"] {
+                width: 100%;
+            }
+
+            form.row.g-3 button {
+                width: 100%;
+            }
+
+
+            /* =================================================
+               CONTAINER
+               ================================================= */
+
+            .container-fluid {
+                width: 100%;
+                max-width: 100%;
+                padding-left: 0;
+                padding-right: 0;
+            }
+
         }
 
     </style>
@@ -158,12 +361,15 @@
 
 </div>
 
+
 <div class="content">
 
     <div class="page-card">
 
         {% with messages = get_flashed_messages(with_categories=true) %}
+
             {% if messages %}
+
                 {% for category, message in messages %}
 
                     <div class="alert alert-{{ category }} alert-dismissible fade show"
@@ -180,8 +386,11 @@
                     </div>
 
                 {% endfor %}
+
             {% endif %}
+
         {% endwith %}
+
 
         {% block content %}
         {% endblock %}
@@ -190,13 +399,17 @@
 
 </div>
 
+
 <!-- Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <!-- Live Timer -->
 <script src="{{ url_for('static', filename='js/live_timer.js') }}"></script>
 
+
 <script>
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const alerts = document.querySelectorAll(".alert");
@@ -206,6 +419,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setTimeout(function () {
 
             const alert = bootstrap.Alert.getOrCreateInstance(alertElement);
+
             alert.close();
 
         }, 3000);
@@ -213,7 +427,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
 </script>
+
 
 {% block scripts %}
 {% endblock %}

@@ -42,18 +42,29 @@ Dashboard
 
         </div>
 
-        <!-- In Progress -->
+        <!-- 1 Hour+ -->
 
         <div class="col">
-    <div class="card border-warning shadow-sm h-100">
-        <div class="card-body text-center">
-            <h5 class="card-title">1 Hour+</h5>
-            <h2 class="fw-bold text-warning">
-                {{ one_hour_count }}
-            </h2>
+
+            <div class="card border-warning shadow-sm h-100">
+
+                <div class="card-body text-center">
+
+                    <h5 class="card-title">
+                        1 Hour+
+                    </h5>
+
+                    <h2 class="fw-bold text-warning">
+                        {{ one_hour_count }}
+                    </h2>
+
+                </div>
+
+            </div>
+
         </div>
-    </div>
-</div>
+
+        <!-- In Progress -->
 
         <div class="col">
 
@@ -115,7 +126,8 @@ Dashboard
 
     </div>
 
-    <!-- Latest Requests -->
+
+    <!-- Latest BDC Requests -->
 
     <div class="card shadow border-0">
 
@@ -157,21 +169,37 @@ Dashboard
                         <tr>
 
                             <td>
+
                                 <a href="{{ url_for('bdc.view_request', id=request.id) }}">
+
                                     {{ request.ticket_number }}
+
                                 </a>
+
                             </td>
 
                             <td>
-                                {{ request.first_name }} {{ request.last_name }}
+
+                                {{ request.first_name }}
+
+                                {% if request.middle_name %}
+                                    {{ request.middle_name }}
+                                {% endif %}
+
+                                {{ request.last_name }}
+
                             </td>
 
                             <td>
+
                                 {{ request.request_type }}
+
                             </td>
 
                             <td>
+
                                 {{ request.sales_rep or "-" }}
+
                             </td>
 
                             <td>
@@ -199,6 +227,7 @@ Dashboard
                             </td>
 
                             <td>
+
                                 <span
                                     class="live-timer"
                                     data-started="{{ request.started_at.isoformat() ~ 'Z' if request.started_at else '' }}"
@@ -206,14 +235,19 @@ Dashboard
                                     data-status="{{ request.status }}">
                                     00:00:00
                                 </span>
+
                             </td>
 
                             <td>
+
                                 {{ request.created_at.strftime("%m/%d/%Y") }}
+
                             </td>
 
                             <td>
+
                                 {{ request.bdc_agent }}
+
                             </td>
 
                         </tr>
@@ -223,7 +257,9 @@ Dashboard
                         <tr>
 
                             <td colspan="8" class="text-center text-muted">
+
                                 No BDC requests available.
+
                             </td>
 
                         </tr>
@@ -240,147 +276,85 @@ Dashboard
 
     </div>
 
-</div>
 
-<!-- Top Sales Consultants -->
+    <!-- Top Sales Consultants -->
 
-<div class="card shadow border-0 mt-4">
+    <div class="card shadow border-0 mt-4">
 
-    <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-white">
 
-        <h4 class="mb-0">
-            Top Sales Consultants
-        </h4>
-
-    </div>
-
-    <div class="card-body">
-
-        <div class="table-responsive">
-
-            <table class="table table-hover align-middle text-center">
-
-                <thead>
-
-                    <tr>
-
-                        <th>Rank</th>
-                        <th>Sales Consultant</th>
-                        <th>Completed Requests</th>
-                        <th>Average Completion Time</th>
-
-                    </tr>
-
-                <thead class="text-center">
-
-                <tbody class="text-center">
-
-                {% for consultant in top_sales_consultants %}
-
-                    <tr>
-
-                        <td>{{ loop.index }}</td>
-
-                        <td>{{ consultant.name }}</td>
-
-                        <td>{{ consultant.completed_requests }}</td>
-
-                        <td>
-                            {{ (consultant.average_seconds // 3600)|int }}h
-                            {{ ((consultant.average_seconds % 3600) // 60)|int }}m
-                            {{ (consultant.average_seconds % 60)|int }}s
-                        </td>
-
-                    </tr>
-
-                {% else %}
-
-                    <tr>
-
-                        <td colspan="4" class="text-center text-muted">
-                            No completed requests found.
-                        </td>
-
-                    </tr>
-
-                {% endfor %}
-
-                </tbody>
-
-            </table>
+            <h4 class="mb-0">
+                Top Sales Consultants
+            </h4>
 
         </div>
 
-    </div>
+        <div class="card-body">
 
-</div>
+            <div class="table-responsive">
 
-<!-- Top Sales Managers -->
+                <table class="table table-hover align-middle text-center">
 
-<div class="card shadow border-0 mt-4">
+                    <thead>
 
-    <div class="card-header bg-success text-white">
+                        <tr>
 
-        <h4 class="mb-0">
-            Top Sales Managers
-        </h4>
+                            <th>Rank</th>
+                            <th>Sales Consultant</th>
+                            <th>Completed Requests</th>
+                            <th>Average Completion Time</th>
 
-    </div>
+                        </tr>
 
-    <div class="card-body">
+                    </thead>
 
-        <div class="table-responsive">
+                    <tbody>
 
-            <table class="table table-hover align-middle text-center">
+                    {% for consultant in top_sales_consultants %}
 
-                <thead>
+                        <tr>
 
-                    <tr>
+                            <td>
+                                {{ loop.index }}
+                            </td>
 
-                        <th>Rank</th>
-                        <th>Sales Manager</th>
-                        <th>Completed Requests</th>
-                        <th>Average Completion Time</th>
+                            <td>
+                                {{ consultant.name }}
+                            </td>
 
-                    </tr>
+                            <td>
+                                {{ consultant.completed_requests }}
+                            </td>
 
-                <thead class="text-center">
+                            <td>
 
-                <tbody class="text-center">
+                                {{ (consultant.average_seconds // 3600)|int }}h
+                                {{ ((consultant.average_seconds % 3600) // 60)|int }}m
+                                {{ (consultant.average_seconds % 60)|int }}s
 
-                {% for manager in top_sales_managers %}
+                            </td>
 
-                    <tr>
+                        </tr>
 
-                        <td>{{ loop.index }}</td>
+                    {% else %}
 
-                        <td>{{ manager.name }}</td>
+                        <tr>
 
-                        <td>{{ manager.completed_requests }}</td>
+                            <td colspan="4" class="text-center text-muted">
 
-                        <td>
-                            {{ (manager.average_seconds // 3600)|int }}h
-                            {{ ((manager.average_seconds % 3600) // 60)|int }}m
-                            {{ (manager.average_seconds % 60)|int }}s
-                        </td>
+                                No completed requests found.
 
-                    </tr>
+                            </td>
 
-                {% else %}
+                        </tr>
 
-                    <tr>
+                    {% endfor %}
 
-                        <td colspan="4" class="text-center text-muted">
-                            No completed requests found.
-                        </td>
+                    </tbody>
 
-                    </tr>
+                </table>
 
-                {% endfor %}
-
-                </tbody>
-
-            </table>
+            </div>
 
         </div>
 

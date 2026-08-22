@@ -68,6 +68,14 @@ def add_request():
 
         now = datetime.now(timezone.utc)
 
+        full_name = request.form.get("full_name", "").strip()
+
+        name_parts = full_name.split()
+
+        first_name = name_parts[0] if len(name_parts) >= 1 else ""
+        last_name = name_parts[-1] if len(name_parts) >= 2 else ""
+        middle_name = " ".join(name_parts[1:-1]) if len(name_parts) >= 3 else ""
+
         new_request = BDCRequest(
 
             # Ticket Information
@@ -83,11 +91,10 @@ def add_request():
             other_request_type=request.form.get("other_request_type"),
 
             # Customer
-            first_name=request.form.get("first_name"),
-            middle_name=request.form.get("middle_name"),
-            last_name=request.form.get("last_name"),
+            first_name=first_name,
+            middle_name=middle_name,
+            last_name=last_name,
 
-            address=request.form.get("address"),
             phone=request.form.get("phone"),
             email=request.form.get("email"),
 
@@ -151,8 +158,6 @@ def list_requests():
 
     sales_rep = request.args.get("sales_rep", "").strip()
 
-    sales_manager = request.args.get("sales_manager", "").strip()
-
     status = request.args.get("status", "").strip()
 
     # ------------------------------------------
@@ -199,12 +204,6 @@ def list_requests():
 
         query = query.filter(
             BDCRequest.sales_rep == sales_rep
-        )
-
-    if sales_manager:
-
-        query = query.filter(
-            BDCRequest.sales_manager == sales_manager
         )
 
     if status:
@@ -257,19 +256,6 @@ def list_requests():
 
     )
 
-    sales_managers = (
-
-        db.session.query(BDCRequest.sales_manager)
-
-        .filter(BDCRequest.sales_manager.isnot(None))
-
-        .distinct()
-
-        .order_by(BDCRequest.sales_manager)
-
-        .all()
-
-    )
 
     statuses = (
 
@@ -295,15 +281,11 @@ def list_requests():
 
         selected_sales_rep=sales_rep,
 
-        selected_sales_manager=sales_manager,
-
         selected_status=status,
 
         request_types=request_types,
 
         sales_reps=sales_reps,
-
-        sales_managers=sales_managers,
 
         statuses=statuses
 
