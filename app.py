@@ -166,7 +166,7 @@ def dashboard():
         1
         for req in BDCRequest.query.filter_by(status="In Progress").all()
         if req.started_at
-        and (datetime.now() - req.started_at).total_seconds() >= 3600
+        and (datetime.now(timezone.utc) - req.started_at).total_seconds() >= 3600
     )
 
     # Latest 5 BDC Requests
@@ -347,11 +347,14 @@ with app.app_context():
 
     ]
 
+    existing_roles = {
+        role.name: role
+        for role in Role.query.all()
+    }
+
     for role_name in roles:
 
-        role = Role.query.filter_by(name=role_name).first()
-
-        if not role:
+        if role_name not in existing_roles:
 
             db.session.add(
                 Role(
@@ -363,9 +366,17 @@ with app.app_context():
     db.session.commit()
 
     seed_super_admin()
-    for role in Role.query.all():
 
-        if not RolePermission.query.filter_by(role_id=role.id).first():
+    all_roles = Role.query.all()
+
+    existing_permission_role_ids = {
+        permission.role_id
+        for permission in RolePermission.query.all()
+    }
+
+    for role in all_roles:
+
+        if role.id not in existing_permission_role_ids:
             db.session.add(
                 RolePermission(
                     role_id=role.id

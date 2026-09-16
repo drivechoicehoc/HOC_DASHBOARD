@@ -1,4 +1,4 @@
-from flask import session
+from flask import session, g
 from models.user import User
 
 
@@ -6,27 +6,25 @@ def has_permission(permission_name):
     """
     Check if the currently logged-in user has the specified permission.
 
-    Super Admin always has full access.
+    The current user's role and permissions are loaded once per request
+    and reused for subsequent permission checks.
     """
 
     # User is not logged in
     if "user_id" not in session:
         return False
 
-    # Get the current user
-    user = User.query.get(session["user_id"])
+    # Load the current user only once per request
+    if not hasattr(g, "current_user"):
+        g.current_user = User.query.get(session["user_id"])
+
+    user = g.current_user
 
     # User or role does not exist
     if not user or not user.role:
         return False
 
-    # ----------------------------------------------------------
-    # Super Admin Override
-    # ----------------------------------------------------------
-    # Super Admin always has access to every page and action.
-    # This prevents accidentally locking yourself out of the
-    # administration panel.
-    # ----------------------------------------------------------
+    # Super Admin always has access
     if user.role.name == "Super Admin":
         return True
 

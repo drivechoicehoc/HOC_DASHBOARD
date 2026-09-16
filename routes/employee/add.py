@@ -5,7 +5,8 @@ from flask import (
     redirect,
     url_for,
     session,
-    request
+    request,
+    flash
 )
 
 from database.database import db
@@ -30,12 +31,26 @@ def add_employee():
 
     if request.method == "POST":
 
+        username = request.form.get("username", "").strip()
+
+        # Check for duplicate username before creating the employee
+        if User.query.filter_by(username=username).first():
+            flash(
+                "Username already exists. Please choose a different username.",
+                "danger"
+            )
+
+            return render_template(
+                "employees/add.html",
+                employee_number=generate_employee_number(),
+                roles=roles
+            )
+
         hire_date = None
 
         hire_date_value = request.form.get("hire_date")
 
         if hire_date_value:
-
             hire_date = datetime.strptime(
                 hire_date_value,
                 "%Y-%m-%d"
@@ -54,7 +69,7 @@ def add_employee():
             middle_name=request.form.get("middle_name"),
             last_name=request.form.get("last_name"),
 
-            username=request.form.get("username"),
+            username=username,
 
             password=hash_password(
                 request.form.get("password")
@@ -73,8 +88,30 @@ def add_employee():
 
         )
 
-        db.session.add(employee)
-        db.session.commit()
+        try:
+
+            db.session.add(employee)
+            db.session.commit()
+
+        except Exception:
+
+            db.session.rollback()
+
+            flash(
+                "Unable to create the employee. Please check the information and try again.",
+                "danger"
+            )
+
+            return render_template(
+                "employees/add.html",
+                employee_number=generate_employee_number(),
+                roles=roles
+            )
+
+        flash(
+            "Employee created successfully.",
+            "success"
+        )
 
         return redirect(
             url_for("employee.employee_list")
